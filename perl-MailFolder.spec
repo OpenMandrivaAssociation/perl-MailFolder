@@ -18,6 +18,7 @@ BuildRequires:	perl-devel
 BuildArch:	noarch
 BuildRequires:	perl(File::Sync)
 BuildRequires:	perl(MIME::Head)
+BuildRoot:	%{_tmppath}/%{name}-%{version}
 
 %description
 This base class, and companion subclasses provide an object-oriented interface
