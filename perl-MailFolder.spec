@@ -1,7 +1,7 @@
 %define module	MailFolder
 %define name	perl-%{module}
 %define version 0.07
-%define release %mkrel 5
+%define release %mkrel 7
 
 Name:		%{name}
 Version:	%{version}
