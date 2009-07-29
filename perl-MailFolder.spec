@@ -1,17 +1,17 @@
-%define module	MailFolder
-%define name	perl-%{module}
-%define version 0.07
-%define release %mkrel 8
+%define upstream_name	 MailFolder
+%define upstream_version 0.07
 
-Name:		%{name}
-Version:	%{version}
-Release:	%{release}
+Name:       perl-%{upstream_name}
+Version:    %perl_convert_version %{upstream_version}
+Release:    %mkrel 1
+
 Summary:	A folder-independant interface to email folders
-license:	Artistic
+License:	Artistic
 Group:     	Development/Perl
-Source:		http://www.cpan.org/authors/id/K/KJ/KJOHNSON/%{module}-%{version}.tar.bz2
-Patch:		http://rt.cpan.org/Ticket/Attachment/106324/20147/MailFolder-0.07-0.071.patch
-Url:            http://search.cpan.org/dist/%{module}/
+Url:        http://search.cpan.org/dist/%{upstream_name}/
+Source0:	http://www.cpan.org/authors/id/K/KJ/KJOHNSON/%{upstream_name}-%{upstream_version}.tar.bz2
+Patch0:		http://rt.cpan.org/Ticket/Attachment/106324/20147/MailFolder-0.07-0.071.patch
+
 %if %{mdkversion} < 1010
 BuildRequires:	perl-devel
 %endif
@@ -25,8 +25,8 @@ This base class, and companion subclasses provide an object-oriented interface
 to email folders independant of the underlying folder implementation.
 
 %prep
-%setup -q -n %{module}-%{version} 
-%patch -p 1
+%setup -q -n %{upstream_name}-%{upstream_version}
+%patch0 -p 1
 
 %build
 %{__perl} Makefile.PL INSTALLDIRS=vendor
@@ -46,4 +46,3 @@ rm -rf %{buildroot}
 %defattr(-,root,root)
 %{_mandir}/*/*
 %{perl_vendorlib}/Mail
-
