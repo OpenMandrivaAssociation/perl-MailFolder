@@ -1,0 +1,136 @@
+--- MailFolder-0.07/Mail/Folder.pm	1998-04-05 12:22:22.000000000 -0500
++++ MailFolder-0.071/Mail/Folder.pm	2004-06-22 23:46:04.494276135 -0500
+@@ -7,6 +7,7 @@
+ # itself.
+ #
+ # $Id: Folder.pm,v 1.7 1998/04/05 17:21:53 kjj Exp $
++# Jun 22, 2004 updates Jim Richardson <develop@aidant.net>
+ 
+ require 5.00397;
+ 
+@@ -17,7 +18,7 @@
+ use MIME::Head;
+ use MIME::Parser;
+ 
+-$VERSION = "0.07";
++$VERSION = "0.071";
+ 
+ =head1 NAME
+ 
+@@ -413,7 +414,7 @@
+ If C<parserobject> is specified it will be used instead of an
+ internally created parser object.  The parser object is expected to a
+ class instance and a subcless (however far removed) of
+-C<MIME::ParserBase>.
++C<MIME::Parser>.
+ 
+ Options are specified as hash items using key and value pairs.
+ 
+@@ -441,8 +442,9 @@
+   my %options = @_;
+   
+   $parser ||= new MIME::Parser or return undef;
+-  croak "$parser isn't a subclass of MIME::ParserBase"
+-    unless $parser->isa('MIME::ParserBase');
++  # apparently MIME::Parser no longer isa MIME::ParserBase
++  croak "$parser isn't a subclass of MIME::Parser"
++   unless $parser->isa('MIME::Parser');
+   
+   my $file = $self->get_message_file($msg) or return undef;
+   
+--- MailFolder-0.07/Mail/Folder/Emaul.pm	1998-04-05 12:22:16.000000000 -0500
++++ MailFolder-0.071/Mail/Folder/Emaul.pm	2004-06-22 23:46:04.452285241 -0500
+@@ -7,13 +7,14 @@
+ # itself.
+ #
+ # $Id: Emaul.pm,v 1.7 1998/04/05 17:21:53 kjj Exp $
++# Jun 22, 2004 updates Jim Richardson <develop@aidant.net>
+ 
+ require 5.00397;
+ package Mail::Folder::Emaul;
+ use strict;
+ use vars qw($VERSION @ISA);
+ @ISA = qw(Mail::Folder);
+-$VERSION = "0.07";
++$VERSION = "0.071";
+ 
+ Mail::Folder->register_type('emaul');
+ 
+@@ -499,7 +500,7 @@
+ 	  or carp "link return: $!\n";
+ 	my @statary = stat($lockfile);
+ 	unlink $lockfile;
+-	if (!defined(@statary) || $statary[3] != 2) { # failed to link?
++	if (!(@statary) || $statary[3] != 2) { # failed to link?
+ 	  goto RETRY;
+ 	}
+       }
+--- MailFolder-0.07/Mail/Folder/Mbox.pm	1998-04-05 12:22:32.000000000 -0500
++++ MailFolder-0.071/Mail/Folder/Mbox.pm	2004-06-22 23:46:04.471281122 -0500
+@@ -7,6 +7,7 @@
+ # itself.
+ #
+ # $Id: Mbox.pm,v 1.6 1998/04/05 17:21:53 kjj Exp $
++# Jun 22, 2004 updates Jim Richardson <develop@aidant.net>
+ 
+ require 5.00397;
+ 
+@@ -15,7 +16,7 @@
+ use vars qw($VERSION @ISA $folder_id);
+ 
+ @ISA = qw(Mail::Folder);
+-$VERSION = "0.07";
++$VERSION = "0.071";
+ 
+ Mail::Folder->register_type('mbox');
+ 
+@@ -732,15 +733,18 @@
+   my $self = shift;
+   # unlink(glob("$self->{MBOX_WorkingDir}/*"));
+   # maybe this should filter out directories, just to be safe...
+-  my $dir = DirHandle->new($self->{MBOX_WorkingDir})
+-    or croak "yeep! can't read $self->{MBOX_WorkingDir} disappeared: $!\n";
+-  for my $file ($dir->read) {
+-    next if (($file eq '.') || ($file eq '..'));
+-    next if (-d "$self->{MBOX_WorkingDir}/$file");
+-    unlink "$self->{MBOX_WorkingDir}/$file";
++  if( -e $self->{MBOX_WorkingDir} )
++  {
++	my $dir = DirHandle->new($self->{MBOX_WorkingDir})
++		or croak "yeep! can't read $self->{MBOX_WorkingDir} disappeared: $!\n";
++	for my $file ($dir->read) {
++		next if (($file eq '.') || ($file eq '..'));
++		next if (-d "$self->{MBOX_WorkingDir}/$file");
++		unlink "$self->{MBOX_WorkingDir}/$file";
++	}
++	$dir->close;
++	rmdir($self->{MBOX_WorkingDir});
+   }
+-  $dir->close;
+-  rmdir($self->{MBOX_WorkingDir});
+ }
+ 
+ sub _lock_folder {
+@@ -779,7 +783,7 @@
+ 	    or carp "link return: $!\n";
+ 	  my @statary = stat($lockfile);
+ 	  unlink $lockfile;
+-	  if (!defined(@statary) || $statary[3] != 2) { # failed to link?
++	  if (!(@statary) || $statary[3] != 2) { # failed to link?
+ 	    goto RETRY;
+ 	  }
+ 	}
+--- MailFolder-0.07/t/maildir/12_refile.t	1998-02-08 16:36:14.000000000 -0600
++++ MailFolder-0.071/t/maildir/12_refile.t	2004-06-22 23:46:04.419292396 -0500
+@@ -19,9 +19,9 @@
+ okay_if(11, $folder = new Mail::Folder('maildir', full_folder()));
+ okay_if(12, $folder->qty == 3);
+ $message = $folder->get_header(1);
+-okay_if(13, $message->get('subject') eq "greeble\n");
++okay_if(13, $message->get('subject') eq "arf\n");
+ $message = $folder->get_header(2);
+-okay_if(14, $message->get('subject') eq "arf\n");
++okay_if(14, $message->get('subject') eq "greeble\n");
+ $message = $folder->get_header(3);
+ okay_if(15, $message->get('subject') eq "greeble\n");
+ okay_if(16, $folder->close);
