@@ -8,7 +8,7 @@ Release:	4
 Summary:	A folder-independant interface to email folders
 License:	Artistic
 Group:     	Development/Perl
-Url:        http://search.cpan.org/dist/%{upstream_name}/
+Url:        https://search.cpan.org/dist/%{upstream_name}/
 Source0:	http://www.cpan.org/authors/id/K/KJ/KJOHNSON/%{upstream_name}-%{upstream_version}.tar.bz2
 Patch0:		http://rt.cpan.org/Ticket/Attachment/106324/20147/MailFolder-0.07-0.071.patch
 
