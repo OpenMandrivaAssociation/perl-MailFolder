@@ -12,6 +12,7 @@ Url:        https://search.cpan.org/dist/%{upstream_name}/
 Source0:	http://www.cpan.org/authors/id/K/KJ/KJOHNSON/%{upstream_name}-%{upstream_version}.tar.bz2
 Patch0:		http://rt.cpan.org/Ticket/Attachment/106324/20147/MailFolder-0.07-0.071.patch
 
+BuildRequires:	make
 BuildRequires:	perl-devel
 BuildRequires:	perl(File::Sync)
 BuildRequires:	perl(MIME::Head)
