@@ -2,14 +2,14 @@
 %define upstream_version 0.07
 
 Name:		perl-%{upstream_name}
-Version:	%perl_convert_version %{upstream_version}
-Release:	4
+Version:	%{upstream_version}
+Release:	5
 
 Summary:	A folder-independant interface to email folders
 License:	Artistic
 Group:     	Development/Perl
-Url:        https://search.cpan.org/dist/%{upstream_name}/
-Source0:	http://www.cpan.org/authors/id/K/KJ/KJOHNSON/%{upstream_name}-%{upstream_version}.tar.bz2
+Url:        https://metacpan.org/dist/MailFolder
+Source0:	https://cpan.metacpan.org/authors/id/K/KJ/KJOHNSON/MailFolder-%{upstream_version}.tar.gz
 Patch0:		http://rt.cpan.org/Ticket/Attachment/106324/20147/MailFolder-0.07-0.071.patch
 
 BuildRequires:	make
