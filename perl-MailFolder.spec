@@ -1,15 +1,13 @@
 %define upstream_name	 MailFolder
-%define upstream_version 0.07
-
 Name:		perl-%{upstream_name}
-Version:	%{upstream_version}
-Release:	5
+Version:	0.07
+Release:	6
 
 Summary:	A folder-independant interface to email folders
 License:	Artistic
 Group:     	Development/Perl
 Url:        https://metacpan.org/dist/MailFolder
-Source0:	https://cpan.metacpan.org/authors/id/K/KJ/KJOHNSON/MailFolder-%{upstream_version}.tar.gz
+Source0:	https://cpan.metacpan.org/authors/id/K/KJ/KJOHNSON/MailFolder-%{version}.tar.gz
 Patch0:		http://rt.cpan.org/Ticket/Attachment/106324/20147/MailFolder-0.07-0.071.patch
 
 BuildRequires:	make
@@ -24,7 +22,7 @@ This base class, and companion subclasses provide an object-oriented interface
 to email folders independant of the underlying folder implementation.
 
 %prep
-%setup -q -n %{upstream_name}-%{upstream_version}
+%setup -q -n %{upstream_name}-%{version}
 %patch0 -p 1
 
 %build
@@ -45,9 +43,7 @@ make test
 %changelog
 * Wed Jul 29 2009 Jérôme Quelin <jquelin@mandriva.org> 0.70.0-1mdv2010.0
 + Revision: 403846
-- rebuild using %%perl_convert_version
-
-* Thu Jul 31 2008 Thierry Vignaud <tv@mandriva.org> 0.07-8mdv2009.0
+- rebuild using %0.07 Thu Jul 31 2008 Thierry Vignaud <tv@mandriva.org> 0.07-8mdv2009.0
 + Revision: 257684
 - rebuild
 
